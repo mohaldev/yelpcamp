@@ -1,0 +1,19 @@
+<% include partials/header %> 
+
+<div class="container">
+    <div class="card" style="width: 28rem;">
+        <div class="container">
+            <h4>Know more about your selected campground</h4>
+            <img class="card-img-top" src="<%= campground[0].image %>">
+        </div>
+        
+        <div class="card-body">
+            <h4 class="card-title"><%= campground[0].name %></h4>    
+            <p class="card-text"><%= campground[0].desc %></p>
+            <a class="btn btn-primary" href="/campgrounds">See all campgrounds</a>
+        </div>
+    </div>
+</div>
+
+<% include partials/footer %> 
+
