@@ -1,25 +1,19 @@
-<% include partials/header %> 
-
-<nav class=" navbar nav justify-content-end">
-  <a class="nav-link" href="#">Signup</a>
-  <a class="nav-link" href="#">Login</a>
-  <a class="nav-link" href="#">Logout</a>
-</nav>
+<% include ../partials/header %> 
 
 <div class="container">
     <header class="jumbotron">
     <div class="container">
-        <h1>The campgrounds page!</h1>
+        <h2>The campgrounds page!</h2>
         <p>You can see all great campgrounds here</p>
         <a class="btn btn-primary" href="/campgrounds/new">Add a new campground</a>
     </div>
     </header>
     <div class="container">
-        <div class="row">
+        <div class="d-flex flex-row flex-wrap justify-content-between">
         
         <% campgroundsAll.forEach(function(campground) { %>
-            <div class="col-lg-4 card">
-                <img src="<%= campground.image %>">
+            <div class="card" style="width:300px; margin-bottom: 20px; border-radius: 2%;">
+                <img src="<%= campground.image %>" style="border-radius: 2%">
                 <div class="card-body">
                 <h4 class="card-title"><%= campground.name %></h4>
         
@@ -34,6 +28,6 @@
     </div>
 </div>
 
-<% include partials/footer %> 
+<% include ../partials/footer %> 
 
 

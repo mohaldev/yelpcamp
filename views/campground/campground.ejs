@@ -1,0 +1,27 @@
+<% include ../partials/header %> 
+
+<div class="container">
+    <div class="row">
+        <div class="card">
+            <div class="container">
+                <h4>Selected campground * <%= campground.name %> *</h4>
+                <img class="card-img-top" src="<%= campground.image %>">
+            </div>
+            
+            <div class="card-body">
+                <p class="card-text"><%= campground.desc %>
+                <hr>
+                <% campground.comments.forEach(function(comment) { %>
+                    <p>
+                        <strong><%= comment.author%></strong> - <%= comment.text %>
+                    </p>
+                <% }) %> 
+                <p><a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add a new comment</a></p>
+                <a class="btn btn-primary" href="/campgrounds">See all campgrounds</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<% include ../partials/footer %> 
+

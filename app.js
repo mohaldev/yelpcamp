@@ -1,9 +1,17 @@
-const express = require('express');
-const app = express();
-const path = require('path');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const Campground = require("./models/campground");
+const express       = require('express'),
+      app           = express(),
+      path          = require('path'),
+      bodyParser    = require('body-parser'),
+      mongoose      = require('mongoose'),
+      Campground    = require('./models/campground'),
+      Comment       = require('./models/comment'),
+      User          = require("./models/user")
+      passport      = require('passport'),
+      LocalStrategy = require('passport-local'),
+      session       = require("express-session"),
+      commentRoutes = require("./routes/comments"),
+      authRoutes    = require("./routes/auth"),
+      campRoutes    = require("./routes/campgrounds")
 
 mongoose.connect('mongodb://localhost/my_database', { useNewUrlParser: true });
 
@@ -12,54 +20,35 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-  res.render('landing');
+app.use(session({
+  secret: "working great",
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req, res, next) => {
+  res.locals.currentUser = req.user;
+  next();
 });
 
-app.get('/campgrounds', (req, res) => {
-  Campground.find({}, function(err, campgrounds) {
-    if (err) {
-      console.log(err);
-    } else {
-      res.render('campgrounds', { campgroundsAll: campgrounds });
-    }
-  });
-});
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/login');
+}
 
-app.post('/campgrounds', (req, res) => {
-  const newCampground = {
-    name: req.body.name,
-    image: req.body.image,
-    desc: req.body.desc
-  };
-  Campground.create(newCampground, (err, campground) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log('Campground created');
-      console.log(campground);
-      res.redirect('campgrounds');
-    }
-  });
-});
+app.use("/campgrounds/:id/comments", commentRoutes);
+app.use(authRoutes);
+app.use("/campgrounds", campRoutes);
 
-app.get('/campgrounds/new', (req, res) => {
-  res.render('new');
-});
-
-app.get('/campgrounds/:id', (req, res) => {
-  const showCampground = req.params.id;
-  Campground.find({ _id: showCampground }, (err, foundCampground) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(foundCampground);
-      res.render('campground', { campground: foundCampground });
-    }
-  });
-});
-
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 2000;
 
 app.listen(PORT, () => {
   console.log('Server Working');
