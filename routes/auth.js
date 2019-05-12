@@ -18,10 +18,9 @@ router.post('/register', (req, res) => {
       console.log(err);
       return res.render('register');
     }
-    passport.authenticate('local')
-    (req, res, function() {
-        res.redirect('/campgrounds');
-      });
+    passport.authenticate('local')(req, res, function() {
+      res.redirect('/campgrounds');
+    });
   });
 });
 
@@ -40,14 +39,8 @@ router.post(
 
 router.get('/logout', (req, res) => {
   req.logout();
+  req.flash('success', 'Logged out!');
   res.redirect('/campgrounds');
 });
-
-function isLoggedIn(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/login');
-}
 
 module.exports = router;
