@@ -1,12 +1,7 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const passport = require("passport");
-const User = require("../models/user");
-
-router.get('/logout', (req, res) => {
-  req.logout();
-  res.redirect('/campgrounds');
-});
+const passport = require('passport');
+const User = require('../models/user');
 
 router.get('/', (req, res) => {
   res.render('landing');
@@ -23,9 +18,10 @@ router.post('/register', (req, res) => {
       console.log(err);
       return res.render('register');
     }
-    passport.authenticate('local')(req, res, function() {
-      res.redirect('/campgrounds');
-    });
+    passport.authenticate('local')
+    (req, res, function() {
+        res.redirect('/campgrounds');
+      });
   });
 });
 
@@ -42,6 +38,11 @@ router.post(
   (req, res) => {}
 );
 
+router.get('/logout', (req, res) => {
+  req.logout();
+  res.redirect('/campgrounds');
+});
+
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
     return next();
@@ -49,4 +50,4 @@ function isLoggedIn(req, res, next) {
   res.redirect('/login');
 }
 
-module.exports = router; 
+module.exports = router;

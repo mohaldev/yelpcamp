@@ -1,0 +1,19 @@
+<% include ../partials/header %> 
+
+<h3>Edit comment by <%= comment.author.username %></h3>
+
+<div class="container d-flex align-items-center flex-column">
+
+    <form action="/campgrounds/<%= campgroundid %>/comments/<%= comment._id%>?_method=PUT" method="POST">
+        <div class="form-group">
+            <input type="text" name="text" value=<%= comment.text%>>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+    <p><a href="/campgrounds">Back to all campgrounds</a></p>
+
+</div>
+
+
+<% include ../partials/footer %> 
+

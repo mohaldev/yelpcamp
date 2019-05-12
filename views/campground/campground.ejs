@@ -4,19 +4,37 @@
     <div class="row">
         <div class="card">
             <div class="container">
-                <h4>Selected campground * <%= campground.name %> *</h4>
+                <h4>Campground * <%= campground.name %> *</h4>
+                <hr>
                 <img class="card-img-top" src="<%= campground.image %>">
             </div>
             
             <div class="card-body">
-                <p class="card-text"><%= campground.desc %>
+                <p class="card-text"><%= campground.author.username %> - <%= campground.desc %></p>
+                <p><a class="btn btn-sm btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add a new comment</a></p>
+
                 <hr>
+
                 <% campground.comments.forEach(function(comment) { %>
-                    <p>
-                        <strong><%= comment.author%></strong> - <%= comment.text %>
-                    </p>
+                    <strong><%= comment.author.username%></strong> - <%= comment.text %>
+
+                    <p><a class="btn btn-sm btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit comment</a></p>
+
+                    <form action="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-sm btn-danger">Delete comment</button>
+                    </form>
                 <% }) %> 
-                <p><a class="btn btn-success" href="/campgrounds/<%= campground._id %>/comments/new">Add a new comment</a></p>
+
+                <hr>
+
+                <% if(currentUser && campground.author.id.equals(currentUser._id)) { %>
+                    <p><a class="btn btn-warning" href="/campgrounds/<%= campground._id %>/edit">Edit Campground</a></p>
+
+                    <form action="/campgrounds/<%= campground._id %>?_method=DELETE" method="POST">
+                        <button class="btn btn-danger">DELETE</button>
+                    </form>
+
+                <% } %>
                 <a class="btn btn-primary" href="/campgrounds">See all campgrounds</a>
             </div>
         </div>
